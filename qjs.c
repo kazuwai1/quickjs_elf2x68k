@@ -103,6 +103,8 @@ static int eval_file(JSContext *ctx, const char *filename, int module, int stric
     return ret;
 }
 
+extern void add_custom_builtins(JSContext *);
+
 /* also used to initialize the worker context */
 static JSContext *JS_NewCustomContext(JSRuntime *rt)
 {
@@ -113,6 +115,10 @@ static JSContext *JS_NewCustomContext(JSRuntime *rt)
     /* system modules */
     js_init_module_std(ctx, "std");
     js_init_module_os(ctx, "os");
+
+    /* x68k iocs functions */
+    add_custom_builtins(ctx);
+
     return ctx;
 }
 

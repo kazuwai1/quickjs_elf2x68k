@@ -1,0 +1,3 @@
+
+// 組み込んだ関数が動くかテスト
+const result = iocs_crtmod(-1); 

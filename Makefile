@@ -16,7 +16,7 @@ PWD      = $(shell pwd)
 
 # ターゲット（X68k）用の共通フラグ
 CFLAGS  = -Wall -Os -m68000 -fomit-frame-pointer
-CFLAGS += -DCONFIG_VERSION=\"2026-06-04_x68k_r1\"
+CFLAGS += -DCONFIG_VERSION=\"2026-06-04_x68k_r2\"
 CFLAGS += -DCONFIG_SINGLE_TASK -DEMSCRIPTEN -D_GNU_SOURCE -DCONFIG_BIGNUM
 CFLAGS += -include quickjs_x68k_stub.h
 CFLAGS += -Wno-format -Wno-incompatible-pointer-types
@@ -26,8 +26,8 @@ CFLAGS += -I.
 LDFLAGS = -lm
 
 # ホスト（PC）用 qjsc のビルドフラグ
-HOST_CFLAGS  = -Wall -O2 -D_GNU_SOURCE -DCONFIG_BIGNUM
-HOST_CFLAGS += -DCONFIG_VERSION=\"2026-06-04_x68k_r1\"
+HOST_CFLAGS  = -Wall -Os -D_GNU_SOURCE -DCONFIG_BIGNUM
+HOST_CFLAGS += -DCONFIG_VERSION=\"2026-06-04_x68k_r2\"
 HOST_CFLAGS += -DCONFIG_CC=\"$(CROSS_COMPILE)gcc\"
 # ★ここが重要：qjsc内部で呼び出すm68k-xelf-gccに対し、
 #   カレントディレクトリにある「m68000用libquickjs.a」を強制的に見に行かせます。
@@ -40,10 +40,10 @@ TARGET_HOST = qjsc
 LIB_TARGET  = libquickjs.a
 
 # 静的ライブラリを構成する共通オブジェクト（X68kターゲット用 = mc68000用）
-LIB_OBJS = quickjs.o libregexp.o libunicode.o cutils.o quickjs-libc.o repl.o dtoa.o quickjs_x68k_atomic.o
+LIB_OBJS = quickjs.o libregexp.o libunicode.o cutils.o quickjs-libc.o repl.o dtoa.o quickjs_x68k_atomic.o x68k.o
 
 # ホスト（PC）用 qjsc をビルドするためのオブジェクト群
-HOST_OBJS = qjsc.host.o quickjs.host.o libregexp.host.o libunicode.host.o cutils.host.o quickjs-libc.host.o repl.host.o dtoa.host.o
+HOST_OBJS = qjsc.host.o quickjs.host.o libregexp.host.o libunicode.host.o cutils.host.o quickjs-libc.host.o repl.host.o dtoa.host.o x68k.host.o
 
 .PHONY: all clean prepare
 
@@ -86,6 +86,7 @@ quickjs-libc.o: quickjs-libc.c quickjs.h cutils.h
 dtoa.o: dtoa.c dtoa.h cutils.h
 qjs.o: qjs.c quickjs.h cutils.h
 quickjs_x68k_atomic.o: quickjs_x68k_atomic.c
+x68k.o: x68k.c
 
 # 7. ホスト（PC）用オブジェクトのコンパイルルール (.host.o)
 %.host.o: %.c
@@ -99,9 +100,10 @@ libregexp.host.o: libregexp.c libregexp.h
 libunicode.host.o: libunicode.c libunicode.h
 cutils.host.o: cutils.c cutils.h
 repl.host.o: repl.c
+x68k.host.o: x68k.c
 
 # 8. クリーンアップ
 clean:
-	rm -f *.o dlfcn.h repl.c $(LIB_TARGET) $(TARGET_X68) $(TARGET_HOST)
+	rm -f *.o *.elf dlfcn.h repl.c $(LIB_TARGET) $(TARGET_X68) $(TARGET_HOST)
 	rm -rf sys
 	

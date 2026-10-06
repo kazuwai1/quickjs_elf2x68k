@@ -90,14 +90,14 @@ STUB_FUNC int setuid_stub(uid_t uid) { return -1; }
 #define setuid setuid_stub
 
 /* 5. pthread 関連マクロ */
-#define pthread_mutex_init(m, a)    (0)
-#define pthread_mutex_lock(m)      (0)
-#define pthread_mutex_unlock(m)    (0)
-#define pthread_mutex_destroy(m)   (0)
-#define pthread_cond_init(c, a)     (0)
-#define pthread_cond_signal(c)      (0)
-#define pthread_cond_wait(c, m)     (0)
+#define pthread_mutex_init(m, a)    ((void)0)
+#define pthread_mutex_lock(m)      ((void)0)
+#define pthread_mutex_unlock(m)    ((void)0)
+#define pthread_mutex_destroy(m)   ((void)0)
+#define pthread_cond_init(c, a)     ((void)0)
+#define pthread_cond_signal(c)      ((void)0)
+#define pthread_cond_wait(c, m)     ((void)0)
 #define pthread_cond_timedwait(c, m, t) (0)
-#define pthread_cond_destroy(c)     (0)
+#define pthread_cond_destroy(c)     ((void)0)
 
 #endif
