@@ -116,8 +116,10 @@ static JSContext *JS_NewCustomContext(JSRuntime *rt)
     js_init_module_std(ctx, "std");
     js_init_module_os(ctx, "os");
 
+#ifdef __human68k__
     /* x68k iocs functions */
     add_custom_builtins(ctx);
+#endif
 
     return ctx;
 }
