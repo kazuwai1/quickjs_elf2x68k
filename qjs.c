@@ -103,7 +103,9 @@ static int eval_file(JSContext *ctx, const char *filename, int module, int stric
     return ret;
 }
 
+#ifdef __human68k__
 extern void add_custom_builtins(JSContext *);
+#endif
 
 /* also used to initialize the worker context */
 static JSContext *JS_NewCustomContext(JSRuntime *rt)

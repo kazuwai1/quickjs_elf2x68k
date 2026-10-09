@@ -502,7 +502,7 @@ static int output_executable(const char *out_filename, const char *cfilename,
              lib_dir, bn_suffix, lto_suffix);
     *arg++ = libjsname;
     *arg++ = "-lm";
-#ifndef __human68k__
+#if 0   /* elf2x68k向けのビルドコマンドなので不要*/
     *arg++ = "-ldl";
 #endif
     *arg++ = "-lpthread";
@@ -822,6 +822,12 @@ int main(int argc, char **argv)
                     "  }\n",
                     e->short_name, e->short_name, e->name);
         }
+        fprintf(fo, "  {\n"
+                    "#ifdef __human68k__\n"
+                    "    extern void add_custom_builtins(JSContext *);\n"
+                    "    add_custom_builtins(ctx);\n"
+                    "#endif\n"
+                    "  }\n");
         for(i = 0; i < cname_list.count; i++) {
             namelist_entry_t *e = &cname_list.array[i];
             if (e->flags == CNAME_TYPE_MODULE) {
